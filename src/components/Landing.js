@@ -18,10 +18,6 @@ export class Landing extends Component {
     this.state = { games: [], addModalShow: false };
   }
 
-  componentDidUpdate() {
-    this.fetchGames();
-  }
-
   componentDidMount() {
     this.fetchGames();
   }
@@ -38,6 +34,7 @@ export class Landing extends Component {
   render() {
     let addModalClose = () => {
       this.setState({ addModalShow: false });
+      this.fetchGames();
     };
     return (
       <Screen>
