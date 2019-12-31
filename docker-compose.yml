@@ -1,0 +1,32 @@
+version: '3'
+services:
+  database:
+    image: 'mongo:latest'
+    container_name: 'ps_mongo_container'
+    environment:
+      - MONGO_INITDB_DATABASE=ps-game-lib
+    ports:
+      - '27017-27019:27017-27019'
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile # switch to Dockerfile.dev for dev builds
+    ports:
+      - '3000:3000'
+    volumes:
+      - /app/node_modules
+      - .:/app
+  api:
+    image: 'node:8'
+    user: 'node'
+    working_dir: /app
+    volumes:
+      - ./node_modules:/app/node_modules
+      - ./node_server:/app/
+    restart: on-failure
+    ports:
+      - '4000:4000'
+    depends_on:
+      - database
+
+    command: 'nodejs server.js'
